@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal Convolution</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Convolve Two Signals</h1>
+        <div class="input-group">
+            <label for="signal1">Signal 1 (comma separated values):</label>
+            <input type="text" id="signal1" placeholder="e.g., 1,2,3,4">
+        </div>
+        <div class="input-group">
+            <label for="signal2">Signal 2 (comma separated values):</label>
+            <input type="text" id="signal2" placeholder="e.g., 0,1,0.5">
+        </div>
+        <button onclick="convolve()">Convolve</button>
+        <h2>Result:</h2>
+        <p id="result"></p>
+    </div>
+    <script>
+        async function convolve() {
+            const signal1 = document.getElementById('signal1').value.split(',').map(Number);
+            const signal2 = document.getElementById('signal2').value.split(',').map(Number);
+
+            const response = await fetch('/convolve', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ signal1, signal2 }),
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.result.join(', ');
+        }
+    </script>
+</body>
+</html>
